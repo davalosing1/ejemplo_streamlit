@@ -51,3 +51,43 @@ st.write("""
 """)
 # Graficamos una tabla
 st.table(df.head())
+
+# Muestra un título y una descripción en la aplicación Streamlit.
+st.write("""
+## Porcentaje de Sobrevivientes por Sexo
+""")
+
+# ====== Cálculos de porcentajes ======
+surv_male = len(df[(df["Sex"] == "male") & (df["Survived"] == 1)])
+total_male = len(df[df["Sex"] == "male"])
+pct_male = (surv_male / total_male) * 100
+
+surv_female = len(df[(df["Sex"] == "female") & (df["Survived"] == 1)])
+total_female = len(df[df["Sex"] == "female"])
+pct_female = (surv_female / total_female) * 100
+
+# Datos para el gráfico
+sex_labels = ["Hombres", "Mujeres"]
+percentages = [pct_male, pct_female]
+
+# Nuevos colores
+colors = ["#1F77B4", "#FF7F0E"]
+
+# Crear gráfico
+fig, ax = plt.subplots(figsize=(7, 3))
+
+ax.barh(sex_labels, percentages, color=colors)
+
+# Etiquetas y estilo
+ax.set_xlabel("Porcentaje de sobrevivientes (%)")
+ax.set_xlim(0, 100)
+
+# Mostrar porcentaje en las barras
+for i, v in enumerate(percentages):
+    ax.text(v + 1, i, f"{v:.1f}%", va="center", fontsize=12)
+
+# Título
+ax.set_title("Porcentaje de Sobrevivientes por Sexo")
+
+# Mostrar en Streamlit
+st.pyplot(fig)
